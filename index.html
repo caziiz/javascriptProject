@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mosque Event Registration System</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <h1>Mosque Event Registration System</h1>
+  </header>
+
+  <main class="main">
+
+    <!-- Registration Form -->
+    <section class="registration">
+      <h2>Participant Registration</h2>
+      <form id="registrationForm">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="name" placeholder="Enter full name" required>
+        </div>
+
+        <div class="field">
+          <label>Age</label>
+          <input type="number" id="age" placeholder="Enter age" required>
+        </div>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="text" id="phone" placeholder="Enter phone number" required>
+        </div>
+
+        <div class="field">
+          <label>Select Event</label>
+          <select id="event" required>
+            <option value="">--Choose an event--</option>
+            <option value="quran">Quran Class</option>
+            <option value="tafsir">Tafsir Lesson</option>
+            <option value="lecture">Community Lecture</option>
+          </select>
+        </div>
+
+        <button  id="button" type="submit">Register</button>
+      </form>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events">
+
+      <div class="event" id="quran-card">
+        <h3>Quran Class <span id="quran-count">0 / 30</span></h3>
+        <p class="age">Age: 5 – 15</p>
+        <ul id="quran-list" class="participants-list">
+          <li>No participants yet</li>
+        </ul>
+      </div>
+
+      <div class="event" id="tafsir-card">
+        <h3>Tafsir Lesson <span id="tafsir-count">0 / 15</span></h3>
+        <p class="age">Age: 16 – 25</p>
+        <ul id="tafsir-list" class="participants-list">
+          <li>No participants yet</li>
+        </ul>
+      </div>
+
+      <div class="event" id="lecture-card">
+        <h3>Community Lecture <span id="lecture-count">0 / 20</span></h3>
+        <p class="age">Age: 26+</p>
+        <ul id="lecture-list" class="participants-list">
+          <li>No participants yet</li>
+        </ul>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
