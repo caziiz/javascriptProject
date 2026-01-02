@@ -57,12 +57,19 @@ registrationForm.addEventListener("submit", function (e) {
   const name = document.getElementById("name").value.trim();
   const age = Number(document.getElementById("age").value);
   const phone = document.getElementById("phone").value.trim();
+
+
   const eventKey = eventSelect.value;
 
   if (eventKey === "") {
     alert("Please select an event");
     return;
   }
+
+  if (!/^\d{8}$/.test(phone)) {
+  alert("enter phone number atleast 8 degits");
+  return;
+}
 
   const event = events[eventKey];
 
@@ -159,6 +166,7 @@ function updateEventDisplay(eventKey) {
       li.style.display = "flex";
       li.style.justifyContent = "space-between";
       li.style.alignItems = "center";
+      li.style.color = "black"
 
       const text = document.createElement("span");
       text.textContent =
@@ -172,6 +180,7 @@ function updateEventDisplay(eventKey) {
       btn.onclick = function () {
         removeParticipant(eventKey, i);
       };
+      
 
       li.appendChild(text);
       li.appendChild(btn);
