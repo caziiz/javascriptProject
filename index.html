@@ -8,76 +8,126 @@
 </head>
 <body>
 
-  <header>
-    <h1>Mosque Event Registration System</h1>
-  </header>
+<header>
+  <h1>Mosque Event Registration System</h1>
+</header>
 
-  <main class="main">
+<main class="container">
 
-    <!-- Registration Form -->
-    <section class="registration">
-      <h2>Participant Registration</h2>
+  <!-- LEFT SIDE -->
+  <section class="left">
+
+    <div class="card">
+      <h2>Register Now</h2>
+
+      <p class="section-title">SELECT EVENT</p>
+
+      <div class="event-select active" data-event="quran">
+        <strong>Quran Class</strong>
+        <span>0 / 15 registered</span>
+      </div>
+
+      <div class="event-select" data-event="tafsir">
+        <strong>Tafsir Lesson</strong>
+        <span>0 / 10 registered</span>
+      </div>
+
+      <div class="event-select" data-event="lecture">
+        <strong>Community Lecture</strong>
+        <span>0 / 10 registered</span>
+      </div>
+    </div>
+
+    <div class="card">
       <form id="registrationForm">
         <div class="field">
-          <label>Full Name</label>
-          <input type="text" id="name" placeholder="Enter full name" required>
+          <label>FULL NAME</label>
+          <input type="text" id="name" placeholder="Enter participant name" required>
         </div>
 
         <div class="field">
-          <label>Age</label>
-          <input type="number" id="age" placeholder="Enter age" required>
+          <label>AGE</label>
+          <input type="number" id="age" placeholder="Enter participant age" required>
         </div>
 
         <div class="field">
-          <label>Phone Number</label>
+          <label>PHONE NUMBER</label>
           <input type="text" id="phone" placeholder="Enter phone number" required>
         </div>
 
-        <div class="field">
-          <label>Select Event</label>
-          <select id="event" required>
-            <option value="">--Choose an event--</option>
-            <option value="quran">Quran Class</option>
-            <option value="tafsir">Tafsir Lesson</option>
-            <option value="lecture">Community Lecture</option>
-          </select>
-        </div>
-
-        <button  id="button" type="submit">Register</button>
+        <button id="button" type="submit">Register Participant</button>
       </form>
-    </section>
+    </div>
 
-    <!-- Events Section -->
-    <section class="events">
+  </section>
 
-      <div class="event" id="quran-card">
-        <h3>Quran Class <span id="quran-count">0 / 30</span></h3>
-        <p class="age">Age: 5 – 15</p>
-        <ul id="quran-list" class="participants-list">
-          <li>No participants yet</li>
-        </ul>
+  <!-- RIGHT SIDE -->
+  <section class="right">
+
+    <h2>Event Status</h2>
+
+    <!-- Quran -->
+    <div class="status-card">
+      <div class="status-header">
+        <h3>Quran Class
+          <p>Age: 5 - 15 </p>
+        </h3>
+        <span class="badge open">OPEN</span>
       </div>
 
-      <div class="event" id="tafsir-card">
-        <h3>Tafsir Lesson <span id="tafsir-count">0 / 15</span></h3>
-        <p class="age">Age: 16 – 25</p>
-        <ul id="tafsir-list" class="participants-list">
-          <li>No participants yet</li>
-        </ul>
+      <p class="capacity">Capacity <strong id="quran-count">0 / 30</strong></p>
+      <div class="progress">
+        <div class="progress-bar" style="width: 0%"></div>
       </div>
 
-      <div class="event" id="lecture-card">
-        <h3>Community Lecture <span id="lecture-count">0 / 20</span></h3>
-        <p class="age">Age: 26+</p>
-        <ul id="lecture-list" class="participants-list">
-          <li>No participants yet</li>
-        </ul>
+      <ul id="quran-list">
+        <li>No participants yet</li>
+      </ul>
+    </div>
+
+    <!-- Tafsir -->
+    <div class="status-card">
+      <div class="status-header">
+        <h3>Tafsir Lesson
+          <p>Age: 16 - 25 </p>
+        </h3>
+        <span class="badge open">OPEN</span>
       </div>
 
-    </section>
+      <p class="capacity">Capacity <strong id="tafsir-count">0 / 15</strong></p>
+      <div class="progress">
+        <div class="progress-bar" style="width: 20%"></div>
+      </div>
 
-  </main>
+      <ul id="tafsir-list">
+        <li>No participants yet</li>
+      </ul>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- Lecture -->
+    <div class="status-card">
+      <div class="status-header">
+        <h3>Community Lecture
+          <p>Age: 26+ </p>
+        </h3>
+        
+        <span class="badge open">OPEN</span>
+      </div>
+
+      <p class="capacity">Capacity <strong id="lecture-count">0 / 20</strong></p>
+      <div class="progress">
+        <div class="progress-bar" style="width: 0%"></div>
+      </div>
+
+      <ul id="lecture-list">
+        <li>No participants yet</li>
+      </ul>
+    </div>
+
+  </section>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>

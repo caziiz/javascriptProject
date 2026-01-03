@@ -1,228 +1,170 @@
 // EVENTS DATA
 const events = {
-  quran: {
-    name: "Quran Class",
-    max: 30,
-    ageGroup: "Children",
-    participants: []
-  },
-  tafsir: {
-    name: "Tafsir Lesson",
-    max: 15,
-    ageGroup: "Youth",
-    participants: []
-  },
-  lecture: {
-    name: "Community Lecture",
-    max: 20,
-    ageGroup: "Adults",
-    participants: []
-  }
+  quran: { name: "Quran Class", max: 15, ageGroup: "Children", participants: [] },
+  tafsir: { name: "Tafsir Lesson", max: 10, ageGroup: "Youth", participants: [] },
+  lecture: { name: "Community Lecture", max: 10, ageGroup: "Adults", participants: [] }
 };
 
-// GET HTML ELEMENTS
+let selectedEvent = "quran";
+
+// ELEMENTS
 const registrationForm = document.getElementById("registrationForm");
-const eventSelect = document.getElementById("event");
+const eventCards = document.querySelectorAll(".event-select");
+const registerBtn = document.getElementById("button");
+const inputs = document.querySelectorAll("#name, #age, #phone");
 
+// INITIAL BUTTON STATE
+registerBtn.disabled = true;
 
-// LOAD DATA FROM LOCALSTORAGE
-window.addEventListener("load", function () {
+// EVENT CARD SELECTION
+eventCards.forEach(card => {
+  card.addEventListener("click", () => {
+    eventCards.forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
+    selectedEvent = card.dataset.event;
+  });
+});
 
+// ENABLE BUTTON ONLY WHEN FORM VALID
+inputs.forEach(input => input.addEventListener("input", checkFormValidity));
+
+function checkFormValidity() {
+  const name = document.getElementById("name").value.trim();
+  const age = document.getElementById("age").value;
+  const phone = document.getElementById("phone").value.trim();
+
+  registerBtn.disabled = !(name && age && /^\d{9}$/.test(phone));
+}
+
+// LOAD FROM LOCALSTORAGE
+window.addEventListener("load", () => {
   const stored = localStorage.getItem("mosqueEvents");
-
   if (stored) {
-
-    const savedEvents = JSON.parse(stored);
-
+    const saved = JSON.parse(stored);
     for (let key in events) {
-
-      if (savedEvents[key]) {
-        events[key].participants = savedEvents[key].participants;
-      } else {
-        events[key].participants = [];
-      }
-
+      if (saved[key]) events[key].participants = saved[key].participants;
       updateEventDisplay(key);
     }
-
-    checkFullEvents();
   }
 });
 
-
-// HANDLE FORM SUBMIT
-registrationForm.addEventListener("submit", function (e) {
+// FORM SUBMIT
+registrationForm.addEventListener("submit", e => {
   e.preventDefault();
 
   const name = document.getElementById("name").value.trim();
   const age = Number(document.getElementById("age").value);
   const phone = document.getElementById("phone").value.trim();
+  const event = events[selectedEvent];
 
-
-  const eventKey = eventSelect.value;
-
-  if (eventKey === "") {
-    alert("Please select an event");
-    return;
-  }
-
-  if (!/^\d{8}$/.test(phone)) {
-  alert("enter phone number atleast 8 degits");
-  return;
-}
-
-  const event = events[eventKey];
-
-  // CHECK DUPLICATE
   if (isAlreadyRegistered(name, phone)) {
-    alert("This person is already registered in another event!");
+    alert("This person is already registered!");
     return;
   }
 
-  // CHECK CAPACITY
   if (event.participants.length >= event.max) {
-    alert("This event is already full!");
+    alert("This event is full!");
     return;
   }
 
-  // CHECK AGE
   if (!ageAllowed(age, event.ageGroup)) {
     alert("Age not allowed for this event!");
     return;
   }
 
-  // ADD PARTICIPANT
-  event.participants.push({
-    name: name,
-    age: age,
-    phone: phone
-  });
-
-  updateEventDisplay(eventKey);
+  event.participants.push({ name, age, phone });
+  updateEventDisplay(selectedEvent);
   saveToLocalStorage();
   registrationForm.reset();
-  checkFullEvents();
+  registerBtn.disabled = true;
 });
-
 
 // AGE VALIDATION
 function ageAllowed(age, group) {
-
-  if (group === "Children") {
-    return age >= 5 && age <= 15;
-  }
-
-  if (group === "Youth") {
-    return age >= 16 && age <= 25;
-  }
-
-  if (group === "Adults") {
-    return age >= 26;
-  }
-
+  if (group === "Children") return age >= 5 && age <= 15;
+  if (group === "Youth") return age >= 16 && age <= 25;
+  if (group === "Adults") return age >= 26;
   return false;
 }
 
-
 // DUPLICATE CHECK
 function isAlreadyRegistered(name, phone) {
-
   for (let key in events) {
-
-    const participants = events[key].participants;
-
-    for (let i = 0; i < participants.length; i++) {
-
-      if (
-        participants[i].name.toLowerCase() === name.toLowerCase() &&
-        participants[i].phone === phone
-      ) {
+    for (let p of events[key].participants) {
+      if (p.name.toLowerCase() === name.toLowerCase() && p.phone === phone) {
         return true;
       }
     }
   }
-
   return false;
 }
 
-
-// UPDATE EVENT DISPLAY + REMOVE BUTTON
+// UPDATE UI
 function updateEventDisplay(eventKey) {
-
-  const ul = document.getElementById(eventKey + "-list");
-  const count = document.getElementById(eventKey + "-count");
-
-  ul.innerHTML = "";
-
   const participants = events[eventKey].participants;
+  const max = events[eventKey].max;
 
-  if (participants.length === 0) {
-    ul.innerHTML = "<li>No participants yet</li>";
+  const list = document.getElementById(eventKey + "-list");
+  const count = document.getElementById(eventKey + "-count");
+  const card = document.querySelector(`.event-select[data-event="${eventKey}"]`);
+  const statusCard = count.closest(".status-card");
+  const badge = statusCard.querySelector(".badge");
+  const progressBar = statusCard.querySelector(".progress-bar");
+
+  // COUNT
+  count.textContent = `${participants.length} / ${max}`;
+  card.querySelector("span").textContent = `${participants.length} / ${max} registered`;
+
+  // PROGRESS
+  let percent = Math.round((participants.length / max) * 100);
+  if (percent > 100) percent = 100;
+  progressBar.style.width = percent + "%";
+
+  // OPEN / CLOSED
+  if (participants.length >= max) {
+    badge.textContent = "CLOSED";
+    badge.classList.remove("open");
+    badge.classList.add("closed");
   } else {
+    badge.textContent = "OPEN";
+    badge.classList.remove("closed");
+    badge.classList.add("open");
+  }
 
-    for (let i = 0; i < participants.length; i++) {
+  function capitalizeName(name) {
+  return name
+    .toLowerCase()
+    .split(" ")
+    .filter(word => word !== "")
+    .map(word => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
+
+  // LIST
+  list.innerHTML = "";
+  if (participants.length === 0) {
+    list.innerHTML = "<li>No participants yet</li>";
+  } else {
+    participants.forEach((p, i) => {
       const li = document.createElement("li");
-      li.style.display = "flex";
-      li.style.justifyContent = "space-between";
-      li.style.alignItems = "center";
-      li.style.color = "black"
-
-      const text = document.createElement("span");
-      text.textContent =
-        participants[i].name +
-        " | Age: " + participants[i].age +
-        " | Phone: " + participants[i].phone;
-
-      const btn = document.createElement("button");
-      btn.textContent = "Remove";
-
-      btn.onclick = function () {
-        removeParticipant(eventKey, i);
-      };
-      
-
-      li.appendChild(text);
-      li.appendChild(btn);
-      ul.appendChild(li);
-    }
+      li.innerHTML = `
+      <span>${capitalizeName(p.name)} (${p.age}) | ${p.phone}</span>
+        <button onclick="removeParticipant('${eventKey}', ${i})">Remove</button>
+      `;
+      list.appendChild(li);
+    });
   }
-
-  count.textContent =
-    participants.length + " / " + events[eventKey].max;
 }
 
-
-// REMOVE PARTICIPANT
+// REMOVE
 function removeParticipant(eventKey, index) {
-
   events[eventKey].participants.splice(index, 1);
-
-  updateEventDisplay(eventKey); 
+  updateEventDisplay(eventKey);
   saveToLocalStorage();
-  checkFullEvents();
 }
 
-
-// DISABLE FULL EVENTS
-function checkFullEvents() {
-
-  for (let key in events) {
-
-    const option = document.querySelector(
-      'option[value="' + key + '"]'
-    );
-
-    if (events[key].participants.length >= events[key].max) {
-      option.disabled = true;
-    } else {
-      option.disabled = false;
-    }
-  }
-}
-
-
-// SAVE TO LOCALSTORAGE
+// SAVE
 function saveToLocalStorage() {
   localStorage.setItem("mosqueEvents", JSON.stringify(events));
 }

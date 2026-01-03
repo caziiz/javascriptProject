@@ -1,131 +1,185 @@
-/* Import Bricolage font */
 body {
   font-family: 'Bricolage', sans-serif;
-  background: #f2f6f5;
+  background: #f5f7fa;
   margin: 0;
   padding: 40px;
-  color: #0a6847;
 }
 
-/* Header */
+/* HEADER */
 header {
   text-align: center;
   margin-bottom: 40px;
 }
 
-header h1 {
-  font-size: 36px;
-  font-weight: normal;
+/* LAYOUT */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
 }
 
-/* Main layout: registration on left, events on right */
-.main {
-  display: flex;
-  gap: 50px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* Registration Form */
-.registration {
-  background: #fff;
-  padding: 30px 40px;
-  border-radius: 16px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-  min-width: 320px;
-  flex: 1 1 300px;
-}
-
-.registration h2 {
-  text-align: center;
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
   margin-bottom: 25px;
 }
 
+/* LEFT SIDE */
+.section-title {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #777;
+}
+
+.event-select {
+  border: 2px solid #eee;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.event-select:hover {
+  background: #f8f8ff;
+}
+
+.event-select.active {
+  border-color: #6c63ff;
+  background: #f2f1ff;
+}
+
+.event-select span {
+  font-size: 14px;
+  color: #555;
+}
+
+/* FORM */
 .field {
-  margin-bottom: 18px;
+  margin-bottom: 15px;
 }
 
 .field label {
-  display: block;
-  margin-bottom: 6px;
+  font-size: 13px;
   font-weight: bold;
 }
 
-.field input,
-.field select {
+.field input {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 15px;
+  border: 1px solid #ddd;
+  margin-top: 6px;
 }
 
 #button {
   width: 100%;
   padding: 14px;
-  background: #0a6847;
+  background: #6c63ff;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-/* Remove button for participants */
-.event ul li button {
-  background:red; /* matches your main button color */
+#button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* RIGHT SIDE */
+.status-card {
+  background: white;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.open {
+  background: #e6fff1;
+  color: #2ecc71;
+}
+
+.closed {
+  background: #ffe6e6;
+  color: #e74c3c;
+}
+
+.capacity {
+  margin: 12px 0;
+}
+
+/* PROGRESS BAR */
+.progress {
+  height: 8px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #6c63ff;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* PARTICIPANT LIST */
+.status-card ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 14px;
+}
+
+.status-card li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* REMOVE BUTTON */
+.status-card ul li button {
+  background: #ff4d4d;
   color: white;
   border: none;
-  padding: 10px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
-  cursor: pointer;
   font-size: 13px;
+  cursor: pointer;
   transition: 0.3s ease;
 }
 
-.event ul li button:hover {
-  background: #084f37; /* matches main button hover */
+.status-card ul li button:hover {
+  background: #d93636;
+  transform: scale(1.05);
 }
 
-
-button:hover {
-  background: #084f37;
-}
-
-/* Events Section */
-.events {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  flex: 1 1 400px;
-}
-
-.event {
-  background: #fff;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.05);
-}
-
-.event h3 {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.event .age {
-  font-size: 14px;
-  margin-bottom: 12px;
-  color: #555;
-}
-
-.event ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.event ul li {
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
 }
